@@ -5,17 +5,28 @@ const path = require('path');
 const session = require('express-session'); 
 const nunjucks = require('nunjucks'); // 템플릿 엔진
 const dotenv = require('dotenv'); // 환경 변수
+const passport = require('passport'); // 패스포트
 
 dotenv.config(); // .env 파일을 읽어서 process.env로 만든다.
 const pageRouter = require('./routes/page');
+const { sequelize } = require('./models'); // 시퀄라이즈 연결
+const passportConfig = require('./passport'); // 패스포트 설정
 
 const app = express(); // express 객체 생성
+passport(); // 패스포트 설정
 app.set('port', process.env.PORT || 8001);
 app.set('view engine', 'html'); // 템플릿 엔진 설정
 nunjucks.configure('views', { // 템플릿 파일들이 위치한 폴더 설정
   express: app,
   watch: true,
 });
+sequelize.sync({ force: false }) // 테이블이 존재하지 않으면 생성한다.
+  .then(() => {
+    console.log('데이터베이스 연결 성공');
+  })
+  .catch((err) => {
+    console.error(err);
+  });
 
 app.use(morgan('dev')); // 로그
 app.use(express.static(path.join(__dirname, 'public'))); // 정적 파일 제공
