@@ -8,12 +8,12 @@ const dotenv = require('dotenv'); // 환경 변수
 const passport = require('passport'); // 패스포트
 
 dotenv.config(); // .env 파일을 읽어서 process.env로 만든다.
-const pageRouter = require('./routes/page');
+// const pageRouter = require('./routes/page');
 const { sequelize } = require('./models'); // 시퀄라이즈 연결
 const passportConfig = require('./passport'); // 패스포트 설정
 
 const app = express(); // express 객체 생성
-passport(); // 패스포트 설정
+passportConfig(); // 패스포트 설정
 app.set('port', process.env.PORT || 8001);
 app.set('view engine', 'html'); // 템플릿 엔진 설정
 nunjucks.configure('views', { // 템플릿 파일들이 위치한 폴더 설정
@@ -42,8 +42,10 @@ app.use(session({ // 세션
     secure: false, // https를 쓸 때 true
   },
 }));
+app.use(passport.initialize()); // 패스포트 초기화
+app.use(passport.session()); // 패스포트 세션
 
-app.use('/', pageRouter);
+// app.use('/', pageRouter);
 
 // 404 처리 미들웨어
 app.use((req, res, next) => { 
