@@ -4,6 +4,9 @@ const morgan = require('morgan'); // 로그를 남기는 모듈
 const nunjucks = require('nunjucks'); // 템플릿 엔진
 
 const { sequelize } = require('./models'); // db 연결
+const indexRouter = require('./routes'); 
+const usersRouter = require('./routes/users'); 
+const commentsRouter = require('./routes/comments'); 
 
 const app = express(); 
 app.set('port', process.env.PORT || 3001);
@@ -24,6 +27,10 @@ app.use(morgan('dev')); // 로그를 남김
 app.use(express.static(path.join(__dirname, 'public'))); // 정적 파일 제공, __dirname은 현재 폴더
 app.use(express.json()); // json 데이터 처리
 app.use(express.urlencoded({ extended: false })); // form 데이터 처리, true면 qs, false면 querystring
+
+app.use('/', indexRouter);
+app.use('/users', usersRouter);
+app.use('/comments', commentsRouter);
 
 app.use((req, res, next) => { // 미들웨어
   const error = new Error(`${req.method} ${req.url} 라우터가 없습니다.`); // 에러 메시지
