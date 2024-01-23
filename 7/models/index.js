@@ -1,4 +1,4 @@
-const sequelize = require("sequelize");
+const Sequelize = require("sequelize");
 
 const env = process.env.NODE_ENV || "development";
 const config = require("../config/config")[env]; // config.json에서 development 객체 가져옴
