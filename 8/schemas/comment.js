@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const { Schema } = mongoose; // 스키마 생성
-const { Types: ObjectId } = Schema; // ObjectId를 Schema.Types.ObjectId로 사용
+const { Types: { ObjectId } } = Schema; // ObjectId를 Schema.Types.ObjectId로 사용
 const commentSchema = new Schema({
   commenter: {
     type: ObjectId,
