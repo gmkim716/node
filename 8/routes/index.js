@@ -6,7 +6,7 @@ const router = express.Router();
 router.get("/", async (req, res, next) => {
   try {
     const users = await User.find({}); // 모든 사용자 찾기
-    res.json(users);
+    res.render("mongoose", { users }); // mongoose.html 렌더링
   } catch (err) {
     console.error(err);
     next(err);

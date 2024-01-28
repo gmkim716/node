@@ -3,7 +3,6 @@ const path = require("path");
 const morgan = require("morgan"); // 로그를 남기는 미들웨어
 const nunjucks = require("nunjucks"); // 템플릿 엔진
 
-const connect = require("./schemas"); // 몽고디비 연결
 // 라우터 연결
 const indexRouter = require("./routes");
 const usersRouter = require("./routes/users");
@@ -17,7 +16,19 @@ nunjucks.configure("views", {
   express: app,
   watch: true,
 });
-connect(); // 몽고디비 연결
+
+// 몽고디비 연결, 책에 적혀있는 내용은 몽구스 버전이 달라서 에러가 발생한다.
+const mongoose = require("mongoose");
+mongoose
+  .connect(
+    "mongodb+srv://gmkim716:m4WERLDQgeSutuEl@nodejs.m01qbgc.mongodb.net/?retryWrites=true&w=majority",
+    {
+      dbName: "nodejs",
+      useNewUrlParser: true,
+    }
+  )
+  .then(() => console.log("MongoDB Connected"))
+  .catch((err) => console.log(err));
 
 // 미들웨어
 app.use(morgan("dev"));
