@@ -10,6 +10,8 @@ const passport = require("passport"); // 패스포트
 dotenv.config(); // .env 파일을 읽어서 process.env로 만든다.
 const pageRouter = require("./routes/page");
 const authRouter = require("./routes/auth");
+const postRouter = require("./routes/post");
+const userRouter = require("./routes/user");
 const { sequelize } = require("./models"); // 시퀄라이즈 연결
 const passportConfig = require("./passport"); // 패스포트 설정
 
@@ -36,6 +38,7 @@ sequelize
 // 미들웨어
 app.use(morgan("dev")); // 로그
 app.use(express.static(path.join(__dirname, "public"))); // 정적 파일 제공
+app.use("/img", express.static(path.join(__dirname, "uploads"))); // 정적 파일 제공
 app.use(express.json()); // body-parser
 app.use(express.urlencoded({ extended: false })); // body-parser
 app.use(cookieParser(process.env.COOKIE_SECRET)); // 쿠키
@@ -59,6 +62,8 @@ app.use(passport.session()); // 패스포트 세션
 // 라우터
 app.use("/", pageRouter);
 app.use("/auth", authRouter);
+app.use("/post", postRouter);
+app.use("/user", userRouter);
 
 // 404 처리 미들웨어
 app.use((req, res, next) => {
