@@ -10,7 +10,7 @@ router.post("/", async (req, res, next) => {
       comment: req.body.comment,
     });
     console.log(comment);
-    const result = await Comment.populate(comment, { path: "commenter" });
+    const result = await Comment.populate(comment, { path: "commenter" });  // populate 메서드로 관련 있는 컬렉션의 다큐먼트를 불러옴
     res.status(201).json(result);
   } catch (err) {
     console.error(err);
@@ -21,7 +21,7 @@ router.post("/", async (req, res, next) => {
 router.route("/:id")
   .patch(async (req, res, next) => {
     try {
-      const result = await Comment.update({
+      const result = await Comment.update({ // update 메서드로 수정
         _id: req.params.id, // id로 찾고
       }, {
         comment: req.body.comment, // comment를 수정
