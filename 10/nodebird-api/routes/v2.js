@@ -1,10 +1,28 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
+const cors = require('cors'); 
+
+const url = require('url');  
 
 const { verifyToken, apiLimiter } = require('./middlewares');
 const { Domain, User, Post, Hashtag } = require('../models');
 
 const router = express.Router(); 
+
+// router.use(cors({  // CORS 설정
+//   credentials: true,  // 응답 헤더에 Access-Control-Allow-Credentials 추가
+// }));
+
+router.use(async (req, res, next) => {  // 라우터에 도메인 등록 여부 확인 미들웨어
+  const domain = await Domain.findOne({
+    where: { host: url.parse(req.get('origin'))?.host },
+  });
+  if (domain) {
+    cors({ origin: req.get('origin'), credentials: true })(req, res, next);
+  } else {
+    next();
+  }
+}); 
 
 router.post('/token', apiLimiter, async (req, res) => {  // POST /v2/token 라우터
   const { clientSecret } = req.body;  // 클라이언트 비밀키

@@ -26,30 +26,6 @@ const request = async (req, api) => {
   }
 };
 
-router.get('/mypost', async (req, res, next) => {  // 내가 쓴 게시글 가져오기
-  try {
-    const result = await request(req, '/posts/my');
-    res.json(result.data);
-  } catch (error) {
-    console.error(error);
-    next(error);
-  }
-});
-
-router.get('/search/:hashtag', async (req, res, next) => {  // 해시태그 검색 결과 가져오기
-  try {
-    const result = await request(
-      req, `/posts/hashtag/${encodeURIComponent(req.params.hashtag)}`,
-    );
-    res.json(result.data);
-  } catch (error) {
-    if (error.code) {
-      console.error(error);
-      next(error);
-    }
-  }
-});
-
 router.get('/test', async (req, res, next) => {  // 테스트 토큰 라우터
   try {
     if (!req.session.jwt) {  // 세션에 토큰이 없으면 토큰 발급 시도
@@ -74,6 +50,33 @@ router.get('/test', async (req, res, next) => {  // 테스트 토큰 라우터
     }
     return next(error);
   }
+});
+router.get('/mypost', async (req, res, next) => {  // 내가 쓴 게시글 가져오기
+  try {
+    const result = await request(req, '/posts/my');
+    res.json(result.data);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+router.get('/search/:hashtag', async (req, res, next) => {  // 해시태그 검색 결과 가져오기
+  try {
+    const result = await request(
+      req, `/posts/hashtag/${encodeURIComponent(req.params.hashtag)}`,
+    );
+    res.json(result.data);
+  } catch (error) {
+    if (error.code) {
+      console.error(error);
+      next(error);
+    }
+  }
+});
+
+router.get('/', (req, res) => {
+  res.render('main', { key: process.env.CLIENT_SECRET });
 });
 
 module.exports = router;
