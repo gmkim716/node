@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GIF 채팅방</title>
+  </head>
+  <body>
+    <div class="">F12를 눌러 console 탭과 network 탭을 확인하세요</div>
+    <script>
+      const webSocket = new WebSocket("ws://localhost:8005");
+      webSocket.onopen = () => {
+        console.log("서버와 연결 완료");
+      };
+      webSocket.onmessage = (event) => {
+        console.log(event.data);
+        webSocket.send("클라이언트에서 서버로 답장을 보냅니다.");
+      };
+    </script>
+  </body>
+</html>
