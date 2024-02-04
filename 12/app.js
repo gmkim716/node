@@ -33,6 +33,7 @@ const sessionMiddelware = session({
 
 app.use(morgan("dev")); // 로그를 남기는 미들웨어
 app.use(express.static(path.join(__dirname, "public"))); // 정적 파일 제공 미들웨어
+app.use("/gif", express.static(path.join(__dirname, "uploads"))); // 정적 파일 제공 미들웨어
 app.use(express.json()); // 요청 본문을 파싱하는 미들웨어
 app.use(express.urlencoded({ extended: false })); // 요청 본문을 파싱하는 미들웨어
 app.use(cookieParser(process.env.COOKIE_SECRET)); // 쿠키를 다루는 미들웨어
@@ -83,4 +84,4 @@ const server = app.listen(app.get("port"), () => {
 });
 
 // 웹소켓 서버 실행
-webSocket(server, app);
+webSocket(server, app, sessionMiddelware);
